@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>School Exam Archive</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #333;
+            text-align: center;
+            border-bottom: 3px solid #007bff;
+            padding-bottom: 10px;
+        }
+        .description {
+            text-align: center;
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 18px;
+        }
+        .section {
+            margin: 30px 0;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        .section h2 {
+            color: #007bff;
+            margin-top: 0;
+        }
+        .folder-list {
+            list-style-type: none;
+            padding: 0;
+        }
+        .folder-list li {
+            margin: 10px 0;
+            padding: 10px;
+            background-color: #f8f9fa;
+            border-radius: 5px;
+        }
+        .folder-list a {
+            text-decoration: none;
+            color: #007bff;
+            font-weight: bold;
+        }
+        .folder-list a:hover {
+            text-decoration: underline;
+        }
+        .button {
+            display: inline-block;
+            padding: 12px 24px;
+            background-color: #28a745;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: bold;
+            margin: 10px 5px;
+        }
+        .button:hover {
+            background-color: #218838;
+        }
+        .submit-button {
+            background-color: #ffc107;
+            color: #212529;
+        }
+        .submit-button:hover {
+            background-color: #e0a800;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎓 School Exam Archive</h1>
+        <p class="description">
+            Free access to past school exams. Browse by year and subject, download individual files or entire folders.
+        </p>
+
+        <div class="section">
+            <h2>📁 Browse Exam Folders</h2>
+            <ul class="folder-list">
+                <li>📂 <a href="2024_HSC_Exams/">2024 HSC Exams</a></li>
+                <li>📂 <a href="2023_HSC_Exams/">2023 HSC Exams</a></li>
+                <li>📂 <a href="Mathematics_Advanced/">Mathematics Advanced</a></li>
+                <li>📂 <a href="English_Advanced/">English Advanced</a></li>
+                <li>📂 <a href="Physics/">Physics</a></li>
+                <li>📂 <a href="Chemistry/">Chemistry</a></li>
+            </ul>
+        </div>
+
+        <div class="section">
+            <h2>⬇️ Download Options</h2>
+            <p>You can download individual files by clicking on them, or download entire folders:</p>
+            <a href="https://github.com/yourusername/your-repo-name/archive/refs/heads/main.zip" class="button">
+                📦 Download All Files (ZIP)
+            </a>
+            <p><small>Replace "yourusername" and "your-repo-name" with your actual GitHub username and repository name.</small></p>
+        </div>
+
+        <div class="section">
+            <h2>📤 Submit New Exams</h2>
+            <p>Have exam papers to share? Help other students by submitting them!</p>
+            <a href="https://github.com/yourusername/your-repo-name/issues/new?template=submit-exam.md" class="button submit-button">
+                ➕ Submit New Exam
+            </a>
+        </div>
+
+        <div class="section">
+            <h2>ℹ️ How to Use This Site</h2>
+            <ol>
+                <li><strong>Browse:</strong> Click on any folder above to see available exams</li>
+                <li><strong>View:</strong> Click on individual PDF files to view them in your browser</li>
+                <li><strong>Download:</strong> Right-click any file and select "Save as" to download</li>
+                <li><strong>Submit:</strong> Use the "Submit New Exam" button to share your own exam papers</li>
+            </ol>
+        </div>
+    </div>
+</body>
+</html>
