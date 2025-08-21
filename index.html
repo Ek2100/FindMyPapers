@@ -3,128 +3,434 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>School Exam Archive</title>
+    <title>Dynamic Exam Archive</title>
     <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
         body {
-            font-family: Arial, sans-serif;
-            max-width: 800px;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+            color: #2c3e50;
+        }
+
+        .container {
+            max-width: 1200px;
             margin: 0 auto;
             padding: 20px;
-            background-color: #f5f5f5;
         }
-        .container {
-            background-color: white;
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            background: white;
             padding: 30px;
-            border-radius: 10px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
         }
-        h1 {
-            color: #333;
-            text-align: center;
-            border-bottom: 3px solid #007bff;
-            padding-bottom: 10px;
+
+        .header h1 {
+            font-size: 2.5rem;
+            color: #27ae60;
+            margin-bottom: 10px;
+            font-weight: 700;
         }
-        .description {
-            text-align: center;
-            color: #666;
+
+        .header p {
+            color: #7f8c8d;
+            font-size: 1.1rem;
+        }
+
+        .config-panel {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
             margin-bottom: 30px;
-            font-size: 18px;
         }
-        .section {
-            margin: 30px 0;
-            padding: 20px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
+
+        .config-panel h2 {
+            color: #27ae60;
+            margin-bottom: 20px;
+            font-size: 1.5rem;
         }
-        .section h2 {
-            color: #007bff;
-            margin-top: 0;
+
+        .form-group {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
         }
-        .folder-list {
-            list-style-type: none;
-            padding: 0;
+
+        .form-group input {
+            flex: 1;
+            min-width: 200px;
+            padding: 12px 15px;
+            border: 2px solid #ecf0f1;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border-color 0.3s;
         }
-        .folder-list li {
-            margin: 10px 0;
-            padding: 10px;
-            background-color: #f8f9fa;
-            border-radius: 5px;
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #27ae60;
         }
-        .folder-list a {
+
+        .btn {
+            background: #27ae60;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .btn:hover {
+            background: #219a52;
+            transform: translateY(-2px);
+        }
+
+        .btn:disabled {
+            background: #bdc3c7;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .content-area {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        .breadcrumb {
+            background: #ecf0f1;
+            padding: 15px 25px;
+            border-bottom: 1px solid #d5dbdb;
+        }
+
+        .breadcrumb a {
+            color: #27ae60;
             text-decoration: none;
-            color: #007bff;
-            font-weight: bold;
+            margin-right: 10px;
         }
-        .folder-list a:hover {
+
+        .breadcrumb a:hover {
             text-decoration: underline;
         }
-        .button {
-            display: inline-block;
-            padding: 12px 24px;
-            background-color: #28a745;
+
+        .file-list {
+            padding: 25px;
+        }
+
+        .file-item {
+            display: flex;
+            align-items: center;
+            padding: 15px;
+            border-bottom: 1px solid #ecf0f1;
+            transition: background-color 0.3s;
+        }
+
+        .file-item:hover {
+            background: #f8f9fa;
+        }
+
+        .file-item:last-child {
+            border-bottom: none;
+        }
+
+        .file-icon {
+            font-size: 1.5rem;
+            margin-right: 15px;
+            width: 30px;
+        }
+
+        .file-info {
+            flex: 1;
+        }
+
+        .file-name {
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 5px;
+        }
+
+        .file-size {
+            color: #7f8c8d;
+            font-size: 0.9rem;
+        }
+
+        .file-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn-small {
+            padding: 8px 15px;
+            font-size: 0.9rem;
+            background: #3498db;
+        }
+
+        .btn-small:hover {
+            background: #2980b9;
+        }
+
+        .btn-download {
+            background: #e74c3c;
+        }
+
+        .btn-download:hover {
+            background: #c0392b;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: #7f8c8d;
+        }
+
+        .error {
+            background: #e74c3c;
             color: white;
-            text-decoration: none;
-            border-radius: 5px;
-            font-weight: bold;
-            margin: 10px 5px;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 20px 0;
         }
-        .button:hover {
-            background-color: #218838;
+
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: #7f8c8d;
         }
-        .submit-button {
-            background-color: #ffc107;
-            color: #212529;
+
+        .empty-state h3 {
+            margin-bottom: 10px;
+            color: #95a5a6;
         }
-        .submit-button:hover {
-            background-color: #e0a800;
+
+        @media (max-width: 768px) {
+            .form-group {
+                flex-direction: column;
+            }
+            
+            .file-item {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+            }
+            
+            .file-actions {
+                width: 100%;
+                justify-content: flex-end;
+            }
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>🎓 School Exam Archive</h1>
-        <p class="description">
-            Free access to past school exams. Browse by year and subject, download individual files or entire folders.
-        </p>
-
-        <div class="section">
-            <h2>📁 Browse Exam Folders</h2>
-            <ul class="folder-list">
-                <li>📂 <a href="2024_HSC_Exams/">2024 HSC Exams</a></li>
-                <li>📂 <a href="2023_HSC_Exams/">2023 HSC Exams</a></li>
-                <li>📂 <a href="Mathematics_Advanced/">Mathematics Advanced</a></li>
-                <li>📂 <a href="English_Advanced/">English Advanced</a></li>
-                <li>📂 <a href="Physics/">Physics</a></li>
-                <li>📂 <a href="Chemistry/">Chemistry</a></li>
-            </ul>
+        <div class="header">
+            <h1>Dynamic Exam Archive</h1>
+            <p>Automatically browse and download exam files from any GitHub repository</p>
         </div>
 
-        <div class="section">
-            <h2>⬇️ Download Options</h2>
-            <p>You can download individual files by clicking on them, or download entire folders:</p>
-            <a href="https://github.com/yourusername/your-repo-name/archive/refs/heads/main.zip" class="button">
-                📦 Download All Files (ZIP)
-            </a>
-            <p><small>Replace "yourusername" and "your-repo-name" with your actual GitHub username and repository name.</small></p>
+        <div class="config-panel">
+            <h2>Repository Configuration</h2>
+            <div class="form-group">
+                <input type="text" id="username" placeholder="GitHub Username" value="">
+                <input type="text" id="repository" placeholder="Repository Name" value="">
+                <button class="btn" onclick="loadRepository()">Load Repository</button>
+            </div>
         </div>
 
-        <div class="section">
-            <h2>📤 Submit New Exams</h2>
-            <p>Have exam papers to share? Help other students by submitting them!</p>
-            <a href="https://github.com/yourusername/your-repo-name/issues/new?template=submit-exam.md" class="button submit-button">
-                ➕ Submit New Exam
-            </a>
-        </div>
-
-        <div class="section">
-            <h2>ℹ️ How to Use This Site</h2>
-            <ol>
-                <li><strong>Browse:</strong> Click on any folder above to see available exams</li>
-                <li><strong>View:</strong> Click on individual PDF files to view them in your browser</li>
-                <li><strong>Download:</strong> Right-click any file and select "Save as" to download</li>
-                <li><strong>Submit:</strong> Use the "Submit New Exam" button to share your own exam papers</li>
-            </ol>
+        <div class="content-area">
+            <div class="breadcrumb" id="breadcrumb" style="display: none;">
+                <span id="breadcrumb-content"></span>
+            </div>
+            <div class="file-list" id="file-list">
+                <div class="empty-state">
+                    <h3>Ready to Browse</h3>
+                    <p>Enter your GitHub username and repository name above to start browsing exam files.</p>
+                </div>
+            </div>
         </div>
     </div>
+
+    <script>
+        let currentUsername = '';
+        let currentRepository = '';
+        let currentPath = '';
+        let pathHistory = [];
+
+        async function loadRepository() {
+            const username = document.getElementById('username').value.trim();
+            const repository = document.getElementById('repository').value.trim();
+            
+            if (!username || !repository) {
+                showError('Please enter both username and repository name');
+                return;
+            }
+
+            currentUsername = username;
+            currentRepository = repository;
+            currentPath = '';
+            pathHistory = [];
+            
+            await loadContents('');
+        }
+
+        async function loadContents(path) {
+            const fileList = document.getElementById('file-list');
+            const breadcrumb = document.getElementById('breadcrumb');
+            
+            fileList.innerHTML = '<div class="loading">Loading files...</div>';
+            
+            try {
+                const url = `https://api.github.com/repos/${currentUsername}/${currentRepository}/contents/${path}`;
+                const response = await fetch(url);
+                
+                if (!response.ok) {
+                    throw new Error(`Repository not found or not accessible (${response.status})`);
+                }
+                
+                const contents = await response.json();
+                currentPath = path;
+                
+                updateBreadcrumb();
+                renderContents(contents);
+                
+            } catch (error) {
+                showError(`Error loading repository: ${error.message}`);
+            }
+        }
+
+        function updateBreadcrumb() {
+            const breadcrumb = document.getElementById('breadcrumb');
+            const breadcrumbContent = document.getElementById('breadcrumb-content');
+            
+            if (currentPath === '') {
+                breadcrumb.style.display = 'none';
+                return;
+            }
+            
+            breadcrumb.style.display = 'block';
+            
+            let html = `<a href="#" onclick="loadContents('')">${currentRepository}</a>`;
+            
+            if (currentPath) {
+                const pathParts = currentPath.split('/');
+                let buildPath = '';
+                
+                pathParts.forEach((part, index) => {
+                    buildPath += (index > 0 ? '/' : '') + part;
+                    html += ` / <a href="#" onclick="loadContents('${buildPath}')">${part}</a>`;
+                });
+            }
+            
+            breadcrumbContent.innerHTML = html;
+        }
+
+        function renderContents(contents) {
+            const fileList = document.getElementById('file-list');
+            
+            if (!contents || contents.length === 0) {
+                fileList.innerHTML = `
+                    <div class="empty-state">
+                        <h3>No Files Found</h3>
+                        <p>This directory appears to be empty.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            // Sort contents: directories first, then files
+            contents.sort((a, b) => {
+                if (a.type === 'dir' && b.type === 'file') return -1;
+                if (a.type === 'file' && b.type === 'dir') return 1;
+                return a.name.localeCompare(b.name);
+            });
+
+            let html = '';
+            
+            contents.forEach(item => {
+                const isDirectory = item.type === 'dir';
+                const isPDF = item.name.toLowerCase().endsWith('.pdf');
+                const icon = isDirectory ? '📁' : (isPDF ? '📄' : '📄');
+                const size = isDirectory ? '' : formatFileSize(item.size);
+                
+                html += `
+                    <div class="file-item">
+                        <div class="file-icon">${icon}</div>
+                        <div class="file-info">
+                            <div class="file-name">${item.name}</div>
+                            ${size ? `<div class="file-size">${size}</div>` : ''}
+                        </div>
+                        <div class="file-actions">
+                            ${isDirectory ? 
+                                `<button class="btn btn-small" onclick="loadContents('${item.path}')">Open Folder</button>` :
+                                `<button class="btn btn-small" onclick="viewFile('${item.download_url}', '${item.name}')">View</button>
+                                 <button class="btn btn-small btn-download" onclick="downloadFile('${item.download_url}', '${item.name}')">Download</button>`
+                            }
+                        </div>
+                    </div>
+                `;
+            });
+            
+            fileList.innerHTML = html;
+        }
+
+        function formatFileSize(bytes) {
+            if (bytes === 0) return '0 Bytes';
+            const k = 1024;
+            const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+            const i = Math.floor(Math.log(bytes) / Math.log(k));
+            return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+        }
+
+        function viewFile(url, filename) {
+            if (filename.toLowerCase().endsWith('.pdf')) {
+                window.open(url, '_blank');
+            } else {
+                // For non-PDF files, download instead
+                downloadFile(url, filename);
+            }
+        }
+
+        function downloadFile(url, filename) {
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = filename;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+        }
+
+        function showError(message) {
+            const fileList = document.getElementById('file-list');
+            fileList.innerHTML = `
+                <div class="error">
+                    <strong>Error:</strong> ${message}
+                </div>
+                <div class="empty-state">
+                    <h3>Unable to Load Repository</h3>
+                    <p>Please check your username and repository name, and make sure the repository is public.</p>
+                </div>
+            `;
+        }
+
+        // Load example repository on page load for demonstration
+window.addEventListener('load', () => {
+    document.getElementById('username').value = 'Ek2100';
+    document.getElementById('repository').value = 'FindMypapers';
+    loadRepository(); // Call the function to load the repository automatically
+});
+    </script>
 </body>
 </html>
