@@ -6,21 +6,21 @@ To ensure the website displays the correct files, it's essential to upload them 
 
 ### Step 1: Navigate to the Correct Folder
 
-The website is designed to look for exam files in a specific directory. All your PDFs should be uploaded to the `media/HSC_2024_Exams/` folder.
+The website is designed to look for exam files in a specific directory. All your PDFs should be uploaded to the `media` directory.
 
-1.  From the main page of this repository, click on the `media` folder.
-
-2.  Then, click on the `HSC_2024_Exams` folder.
+> From the main page of this repository, click on the `media` folder.
 
 ### Step 2: Upload Your Files
 
-Once you are inside the `media/HSC_2024_Exams/` folder, you can easily upload files directly from your computer.
+Once you are inside the `media` directory, you can easily upload files directly from your computer.
 
-1.  Click the **"Add file"** dropdown menu.
+1. Navigate to the directory you would like to upload your folder (e.g. `media/Year 11/Math Advanced (2U)/Yearly papers/`)
+  
+2.  Click the **"Add file"** dropdown menu.
 
-2.  Select **"Upload files"**.
+3.  Select **"Upload files"**.
 
-3.  You can either drag and drop your PDF files into the designated area or click **"choose your files"** to select them from your computer.
+4.  You can either drag and drop your PDF files into the designated area or click **"choose your files"** to select them from your computer.
 
 ### Step 3: Commit Your Changes
 
@@ -32,7 +32,7 @@ After uploading your files, you need to save them to the repository.
 
 3.  Click the green **"Commit changes"** button.
 
-That's it! The website will automatically detect your newly added files and make them available to users.
+That's it! The website will automatically detect your newly added files, and once approved by a maintainer will be visible.
 
 **Pro-Tips for Organizing Files:**
 
