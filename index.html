@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dynamic Exam Archive</title>
+    <title>FindMyPapers</title>
     <style>
         * {
             margin: 0;
@@ -11,116 +11,112 @@
             box-sizing: border-box;
         }
 
+        /* Added CSS variables for light/dark mode theming */
+        :root {
+            --bg-primary: #f8fdf8;
+            --bg-secondary: #ffffff;
+            --bg-accent: #e8f5e8;
+            --text-primary: #1a4d1a;
+            --text-secondary: #2d5a2d;
+            --text-muted: #5a7a5a;
+            --border-color: #d4edda;
+            --accent-color: #28a745;
+            --accent-hover: #218838;
+            --shadow: rgba(40, 167, 69, 0.1);
+        }
+
+        [data-theme="dark"] {
+            --bg-primary: #0d1f0d;
+            --bg-secondary: #1a2e1a;
+            --bg-accent: #2d4a2d;
+            --text-primary: #e8f5e8;
+            --text-secondary: #d4edda;
+            --text-muted: #a8c8a8;
+            --border-color: #3d5a3d;
+            --accent-color: #40c057;
+            --accent-hover: #51cf66;
+            --shadow: rgba(0, 0, 0, 0.3);
+        }
+
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-            min-height: 100vh;
-            color: #2c3e50;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            transition: background-color 0.3s ease, color 0.3s ease;
         }
 
         .container {
-            max-width: 1200px;
+            max-width: 900px;
             margin: 0 auto;
             padding: 20px;
         }
 
+        /* Enhanced header with icon and theme toggle */
         .header {
             text-align: center;
             margin-bottom: 40px;
-            background: white;
-            padding: 30px;
-            border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            position: relative;
         }
 
         .header h1 {
-            font-size: 2.5rem;
-            color: #27ae60;
-            margin-bottom: 10px;
+            font-size: 2.2rem;
+            color: var(--text-primary);
             font-weight: 700;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
         }
 
-        .header p {
-            color: #7f8c8d;
+        .header-icon {
+            font-size: 2rem;
+        }
+
+        .subtitle {
+            color: var(--text-muted);
+            margin-top: 8px;
             font-size: 1.1rem;
         }
 
-        .config-panel {
-            background: white;
-            padding: 25px;
-            border-radius: 15px;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
-            margin-bottom: 30px;
-        }
-
-        .config-panel h2 {
-            color: #27ae60;
-            margin-bottom: 20px;
-            font-size: 1.5rem;
-        }
-
-        .form-group {
-            display: flex;
-            gap: 15px;
-            margin-bottom: 20px;
-            flex-wrap: wrap;
-        }
-
-        .form-group input {
-            flex: 1;
-            min-width: 200px;
-            padding: 12px 15px;
-            border: 2px solid #ecf0f1;
-            border-radius: 8px;
-            font-size: 1rem;
-            transition: border-color 0.3s;
-        }
-
-        .form-group input:focus {
-            outline: none;
-            border-color: #27ae60;
-        }
-
-        .btn {
-            background: #27ae60;
+        .theme-toggle {
+            position: absolute;
+            top: 0;
+            right: 0;
+            background: var(--accent-color);
             color: white;
             border: none;
-            padding: 12px 25px;
-            border-radius: 8px;
+            padding: 8px 12px;
+            border-radius: 6px;
             cursor: pointer;
-            font-size: 1rem;
-            font-weight: 600;
-            transition: all 0.3s;
+            font-size: 0.9rem;
+            transition: background-color 0.2s;
         }
 
-        .btn:hover {
-            background: #219a52;
-            transform: translateY(-2px);
+        .theme-toggle:hover {
+            background: var(--accent-hover);
         }
 
-        .btn:disabled {
-            background: #bdc3c7;
-            cursor: not-allowed;
-            transform: none;
-        }
-
-        .content-area {
-            background: white;
-            border-radius: 15px;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+        /* Updated content styling with green theme */
+        .content {
+            background: var(--bg-secondary);
+            border-radius: 12px;
+            box-shadow: 0 4px 20px var(--shadow);
             overflow: hidden;
+            border: 1px solid var(--border-color);
         }
 
         .breadcrumb {
-            background: #ecf0f1;
-            padding: 15px 25px;
-            border-bottom: 1px solid #d5dbdb;
+            background: var(--bg-accent);
+            padding: 16px 24px;
+            border-bottom: 1px solid var(--border-color);
+            font-size: 0.95rem;
         }
 
         .breadcrumb a {
-            color: #27ae60;
+            color: var(--accent-color);
             text-decoration: none;
-            margin-right: 10px;
+            font-weight: 500;
         }
 
         .breadcrumb a:hover {
@@ -128,19 +124,21 @@
         }
 
         .file-list {
-            padding: 25px;
+            min-height: 300px;
         }
 
+        /* Enhanced file item styling with better spacing and icons */
         .file-item {
             display: flex;
             align-items: center;
-            padding: 15px;
-            border-bottom: 1px solid #ecf0f1;
-            transition: background-color 0.3s;
+            padding: 16px 24px;
+            border-bottom: 1px solid var(--border-color);
+            transition: all 0.2s ease;
         }
 
         .file-item:hover {
-            background: #f8f9fa;
+            background: var(--bg-accent);
+            transform: translateX(4px);
         }
 
         .file-item:last-child {
@@ -148,88 +146,107 @@
         }
 
         .file-icon {
-            font-size: 1.5rem;
-            margin-right: 15px;
-            width: 30px;
+            font-size: 1.4rem;
+            margin-right: 16px;
+            width: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
         .file-info {
             flex: 1;
+            cursor: pointer;
         }
 
         .file-name {
             font-weight: 600;
-            color: #2c3e50;
-            margin-bottom: 5px;
+            color: var(--accent-color);
+            font-size: 1rem;
+        }
+
+        .file-name:hover {
+            text-decoration: underline;
         }
 
         .file-size {
-            color: #7f8c8d;
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            margin-top: 4px;
+        }
+
+        /* Updated button styling with green theme */
+        .download-btn {
+            background: var(--accent-color);
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
             font-size: 0.9rem;
+            font-weight: 500;
+            transition: all 0.2s ease;
         }
 
-        .file-actions {
-            display: flex;
-            gap: 10px;
+        .download-btn:hover {
+            background: var(--accent-hover);
+            transform: translateY(-1px);
         }
 
-        .btn-small {
-            padding: 8px 15px;
-            font-size: 0.9rem;
-            background: #3498db;
-        }
-
-        .btn-small:hover {
-            background: #2980b9;
-        }
-
-        .btn-download {
-            background: #e74c3c;
-        }
-
-        .btn-download:hover {
-            background: #c0392b;
+        /* Enhanced loading and empty states */
+        .loading, .empty-state {
+            text-align: center;
+            padding: 60px 24px;
+            color: var(--text-muted);
         }
 
         .loading {
-            text-align: center;
-            padding: 40px;
-            color: #7f8c8d;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .spinner {
+            width: 32px;
+            height: 32px;
+            border: 3px solid var(--border-color);
+            border-top: 3px solid var(--accent-color);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
         }
 
         .error {
-            background: #e74c3c;
-            color: white;
-            padding: 15px;
-            border-radius: 8px;
-            margin: 20px 0;
+            background: #ffeaa7;
+            color: #d63031;
+            padding: 16px 24px;
+            border-left: 4px solid #d63031;
+            margin: 16px 24px;
+            border-radius: 4px;
         }
 
-        .empty-state {
-            text-align: center;
-            padding: 60px 20px;
-            color: #7f8c8d;
-        }
-
-        .empty-state h3 {
-            margin-bottom: 10px;
-            color: #95a5a6;
-        }
-
+        /* Added responsive design improvements */
         @media (max-width: 768px) {
-            .form-group {
-                flex-direction: column;
+            .container {
+                padding: 16px;
+            }
+            
+            .header h1 {
+                font-size: 1.8rem;
             }
             
             .file-item {
-                flex-direction: column;
-                align-items: flex-start;
-                gap: 10px;
+                padding: 12px 16px;
             }
             
-            .file-actions {
-                width: 100%;
-                justify-content: flex-end;
+            .theme-toggle {
+                position: static;
+                margin-top: 16px;
             }
         }
     </style>
@@ -237,67 +254,45 @@
 <body>
     <div class="container">
         <div class="header">
-            <h1>Dynamic Exam Archive</h1>
-            <p>Automatically browse and download exam files from any GitHub repository</p>
+            <!-- Added icon and theme toggle button -->
+            <h1>
+                <span class="header-icon">📚</span>
+                FindMyPapers
+            </h1>
+            <p class="subtitle">Browse and download exam files from your repository</p>
+            <button class="theme-toggle" onclick="toggleTheme()">🌙 Dark Mode</button>
         </div>
 
-        <div class="config-panel">
-            <h2>Repository Configuration</h2>
-            <div class="form-group">
-                <input type="text" id="username" placeholder="GitHub Username" value="">
-                <input type="text" id="repository" placeholder="Repository Name" value="">
-                <button class="btn" onclick="loadRepository()">Load Repository</button>
-            </div>
-        </div>
-
-        <div class="content-area">
+        <div class="content">
             <div class="breadcrumb" id="breadcrumb" style="display: none;">
                 <span id="breadcrumb-content"></span>
             </div>
             <div class="file-list" id="file-list">
-                <div class="empty-state">
-                    <h3>Ready to Browse</h3>
-                    <p>Enter your GitHub username and repository name above to start browsing exam files.</p>
+                <!-- Enhanced loading state with spinner -->
+                <div class="loading">
+                    <div class="spinner"></div>
+                    <p>Loading past papers...</p>
                 </div>
             </div>
         </div>
     </div>
 
     <script>
-        let currentUsername = '';
-        let currentRepository = '';
-        let currentPath = '';
-        let pathHistory = [];
-
-        async function loadRepository() {
-            const username = document.getElementById('username').value.trim();
-            const repository = document.getElementById('repository').value.trim();
-            
-            if (!username || !repository) {
-                showError('Please enter both username and repository name');
-                return;
-            }
-
-            currentUsername = username;
-            currentRepository = repository;
-            currentPath = '';
-            pathHistory = [];
-            
-            await loadContents('');
-        }
+        const GITHUB_USERNAME = 'Ek2100';
+        const GITHUB_REPOSITORY = 'FindMypapers';
+        let currentPath = 'media';
 
         async function loadContents(path) {
             const fileList = document.getElementById('file-list');
-            const breadcrumb = document.getElementById('breadcrumb');
             
             fileList.innerHTML = '<div class="loading">Loading files...</div>';
             
             try {
-                const url = `https://api.github.com/repos/${currentUsername}/${currentRepository}/contents/${path}`;
+                const url = `https://api.github.com/repos/${GITHUB_USERNAME}/${GITHUB_REPOSITORY}/contents/${path}`;
                 const response = await fetch(url);
                 
                 if (!response.ok) {
-                    throw new Error(`Repository not found or not accessible (${response.status})`);
+                    throw new Error(`Unable to load files (${response.status})`);
                 }
                 
                 const contents = await response.json();
@@ -307,7 +302,7 @@
                 renderContents(contents);
                 
             } catch (error) {
-                showError(`Error loading repository: ${error.message}`);
+                showError(`Error: ${error.message}`);
             }
         }
 
@@ -315,24 +310,22 @@
             const breadcrumb = document.getElementById('breadcrumb');
             const breadcrumbContent = document.getElementById('breadcrumb-content');
             
-            if (currentPath === '') {
+            if (currentPath === 'media') {
                 breadcrumb.style.display = 'none';
                 return;
             }
             
             breadcrumb.style.display = 'block';
             
-            let html = `<a href="#" onclick="loadContents('')">${currentRepository}</a>`;
+            let html = `<a href="#" onclick="loadContents('media')">media</a>`;
             
-            if (currentPath) {
-                const pathParts = currentPath.split('/');
-                let buildPath = '';
-                
-                pathParts.forEach((part, index) => {
-                    buildPath += (index > 0 ? '/' : '') + part;
-                    html += ` / <a href="#" onclick="loadContents('${buildPath}')">${part}</a>`;
-                });
-            }
+            const pathParts = currentPath.replace('media/', '').split('/').filter(part => part);
+            let buildPath = 'media';
+            
+            pathParts.forEach(part => {
+                buildPath += '/' + part;
+                html += ` / <a href="#" onclick="loadContents('${buildPath}')">${part}</a>`;
+            });
             
             breadcrumbContent.innerHTML = html;
         }
@@ -343,15 +336,27 @@
             if (!contents || contents.length === 0) {
                 fileList.innerHTML = `
                     <div class="empty-state">
-                        <h3>No Files Found</h3>
-                        <p>This directory appears to be empty.</p>
+                        <p>📂 No files found in this folder.</p>
                     </div>
                 `;
                 return;
             }
 
-            // Sort contents: directories first, then files
-            contents.sort((a, b) => {
+            const filteredContents = contents.filter(item => 
+                item.type === 'dir' || item.name.toLowerCase().endsWith('.pdf')
+            );
+
+            if (filteredContents.length === 0) {
+                fileList.innerHTML = `
+                    <div class="empty-state">
+                        <p>📄 No PDF files found in this folder.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            // Sort: directories first, then PDFs
+            filteredContents.sort((a, b) => {
                 if (a.type === 'dir' && b.type === 'file') return -1;
                 if (a.type === 'file' && b.type === 'dir') return 1;
                 return a.name.localeCompare(b.name);
@@ -359,26 +364,19 @@
 
             let html = '';
             
-            contents.forEach(item => {
+            filteredContents.forEach(item => {
                 const isDirectory = item.type === 'dir';
-                const isPDF = item.name.toLowerCase().endsWith('.pdf');
-                const icon = isDirectory ? '📁' : (isPDF ? '📄' : '📄');
+                const icon = isDirectory ? '📁' : '📄';
                 const size = isDirectory ? '' : formatFileSize(item.size);
                 
                 html += `
                     <div class="file-item">
                         <div class="file-icon">${icon}</div>
-                        <div class="file-info">
+                        <div class="file-info" onclick="${isDirectory ? `loadContents('${item.path}')` : `openFile('${item.download_url}')`}">
                             <div class="file-name">${item.name}</div>
                             ${size ? `<div class="file-size">${size}</div>` : ''}
                         </div>
-                        <div class="file-actions">
-                            ${isDirectory ? 
-                                `<button class="btn btn-small" onclick="loadContents('${item.path}')">Open Folder</button>` :
-                                `<button class="btn btn-small" onclick="viewFile('${item.download_url}', '${item.name}')">View</button>
-                                 <button class="btn btn-small btn-download" onclick="downloadFile('${item.download_url}', '${item.name}')">Download</button>`
-                            }
-                        </div>
+                        ${!isDirectory ? `<button class="download-btn" onclick="downloadFile('${item.download_url}', '${item.name}')">Download</button>` : ''}
                     </div>
                 `;
             });
@@ -394,13 +392,8 @@
             return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
         }
 
-        function viewFile(url, filename) {
-            if (filename.toLowerCase().endsWith('.pdf')) {
-                window.open(url, '_blank');
-            } else {
-                // For non-PDF files, download instead
-                downloadFile(url, filename);
-            }
+        function openFile(url) {
+            window.open(url, '_blank');
         }
 
         function downloadFile(url, filename) {
@@ -415,22 +408,42 @@
         function showError(message) {
             const fileList = document.getElementById('file-list');
             fileList.innerHTML = `
-                <div class="error">
-                    <strong>Error:</strong> ${message}
-                </div>
+                <div class="error">${message}</div>
                 <div class="empty-state">
-                    <h3>Unable to Load Repository</h3>
-                    <p>Please check your username and repository name, and make sure the repository is public.</p>
+                    <p>Make sure your repository is public and contains a 'media' folder with PDF files.</p>
                 </div>
             `;
         }
 
-        // Load example repository on page load for demonstration
-window.addEventListener('load', () => {
-    document.getElementById('username').value = 'Ek2100';
-    document.getElementById('repository').value = 'FindMypapers';
-    loadRepository(); // Call the function to load the repository automatically
-});
+        function toggleTheme() {
+            const html = document.documentElement;
+            const themeToggle = document.querySelector('.theme-toggle');
+            
+            if (html.getAttribute('data-theme') === 'dark') {
+                html.removeAttribute('data-theme');
+                themeToggle.innerHTML = '🌙 Dark Mode';
+                localStorage.setItem('theme', 'light');
+            } else {
+                html.setAttribute('data-theme', 'dark');
+                themeToggle.innerHTML = '☀️ Light Mode';
+                localStorage.setItem('theme', 'dark');
+            }
+        }
+
+        function loadTheme() {
+            const savedTheme = localStorage.getItem('theme');
+            const themeToggle = document.querySelector('.theme-toggle');
+            
+            if (savedTheme === 'dark') {
+                document.documentElement.setAttribute('data-theme', 'dark');
+                themeToggle.innerHTML = '☀️ Light Mode';
+            }
+        }
+
+        window.addEventListener('load', () => {
+            loadTheme(); // Load theme before loading content
+            loadContents('media');
+        });
     </script>
 </body>
 </html>
